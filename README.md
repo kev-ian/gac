@@ -28,3 +28,4 @@ A dump of the database file is provided also `call_ticket.sql`
 1. src/AppBundle/Controller/DefaultController.php (Controller for the applciation)
 2. src/AppBundle/Repository/CallTicketRepository.php (SQL)
 3. src/AppBundle/Services/LoadCsvFile.php (This file holds most of the code used by the application)
+4. app/config/parameters.yml (database access. Edit parameters `database_name`, `database_user` and `database_password`)
