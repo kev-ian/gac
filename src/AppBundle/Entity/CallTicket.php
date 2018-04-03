@@ -45,7 +45,7 @@ class CallTicket
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="datetime", nullable=true)
+     * @ORM\Column(name="date", type="string", nullable=true)
      */
     private $date;
 

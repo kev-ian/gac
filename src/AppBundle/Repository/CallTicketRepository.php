@@ -20,7 +20,7 @@ class CallTicketRepository extends \Doctrine\ORM\EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('c')
                             ->addSelect('SUM(c.durationReal) as realDuration')
-                            ->where('DATE(c.date) >= :date')
+                            ->where('c.date >= :date')
                             ->setParameter('date', $date);
 
         return $queryBuilder->getQuery()->getScalarResult();
@@ -55,5 +55,26 @@ class CallTicketRepository extends \Doctrine\ORM\EntityRepository
              . 'ORDER BY durationInvoiced DESC LIMIT 10';
 
         return $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchAll();
+    }
+
+    /**
+     *  Load file in database
+     *
+     * @param $file_path
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    public function saveFileInDb($file)
+    {
+        $sql = sprintf("LOAD DATA LOCAL INFILE '%s' 
+            REPLACE INTO TABLE %s 
+            CHARACTER SET latin1  
+            FIELDS TERMINATED BY ';' 
+            LINES TERMINATED BY '\n'
+            IGNORE 3 LINES 
+            (`billedAccount`, `InvoiceNumber`, `subscriberNumber`, `date`, `time`, `durationReal`, `durationInvoiced`, `type`)",
+          addslashes($file), 'call_ticket'
+        );
+
+        return $this->getEntityManager()->getConnection()->executeQuery($sql);
     }
 }

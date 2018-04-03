@@ -47,58 +47,12 @@ class LoadCsvFile
     /**
      * Load the csv file
      */
-    public function loadFile()
+    public function loadAndSaveFile()
     {
         try {
-            if (($handle = fopen($this->getFile(), "r")) !== FALSE) {
-                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-                    $explode[] = $data;
-                }
-
-                fclose($handle);
-
-                // CSV headers, not used for now
-                $header = $explode[2];
-
-                // Remove from array, those fields are empty for some reason
-                unset($explode[0], $explode[1], $explode[2]);
-
-                $this->saveTickets($explode);
-            }
+            $this->callRepository->saveFileInDb($this->getFile());
         } catch (\Exception $e) {
             // Log errors?
-        }
-    }
-
-    /**
-     * Persist data into database
-     */
-    public function saveTickets($data)
-    {
-        // chunk the array and process it in batch
-        $chunks = array_chunk($data, 5);
-
-        foreach ($chunks as $items) {
-            foreach ($items as $item) {
-                $dateTime = \DateTime::createFromFormat('d/m/Y', $item[3]);
-
-                /** @var CallTicket $callTicket */
-                $callTicket = new CallTicket();
-                $callTicket->setBilledAccount($item[0])
-                  ->setInvoiceNumber($item[1])
-                  ->setSubscriberNumber($item[2])
-                  ->setDurationReal($item[5])
-                  ->setDurationInvoiced($item[6])
-                  ->setTime($item[4])
-                  ->setType($item[7]);
-
-                if (is_object($dateTime)) {
-                    $callTicket->setDate($dateTime);
-                }
-
-                $this->manager->persist($callTicket);
-                $this->manager->flush();
-            }
         }
     }
 
@@ -133,8 +87,7 @@ class LoadCsvFile
     public function getTotalRealDuration()
     {
         $date = '15/02/2012';
-        $dateTime = \DateTime::createFromFormat('d/m/Y', $date);
-        $totalDuration = $this->callRepository->getTotalRealDuration($dateTime->format('Y-m-d'));
+        $totalDuration = $this->callRepository->getTotalRealDuration($date);
 
         return $totalDuration;
     }

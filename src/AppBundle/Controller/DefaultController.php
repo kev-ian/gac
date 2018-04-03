@@ -27,11 +27,8 @@ class DefaultController extends Controller
      */
     public function loadFileAction(Request $request, LoadCsvFile $loader)
     {
-        $loader->loadFile();
+        $loader->loadAndSaveFile();
 
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-          'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);
+        return $this->redirectToRoute('homepage');
     }
 }
