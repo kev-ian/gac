@@ -1,6 +1,8 @@
 Gac Technology
 ===
 
+Application Symfony v3.4
+
 # Installation
 
 Navigate to the project folder and run commands below
