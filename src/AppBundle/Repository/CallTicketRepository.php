@@ -37,7 +37,7 @@ class CallTicketRepository extends \Doctrine\ORM\EntityRepository
           ->addSelect('COUNT(c.id) as smsCount')
           ->groupBy('c.subscriberNumber');
 
-        return $queryBuilder->getQuery()->getScalarResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

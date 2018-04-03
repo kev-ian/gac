@@ -10,13 +10,27 @@
                     <td>Durée totale réelle des appels effectués après le 15/02/2012: <strong>{{ totalDurationReal[0].realDuration }}</strong></td>
                 </tr>
             {% endif %}
-            {% if numberOfSms is defined and numberOfSms is not empty %}
+        </table>
+
+        <h3>Quantité totale de SMS</h3>
+        <table border="1">
+            <thead>
                 <tr>
-                    <td>Quantité totale de SMS : <strong>{{ numberOfSms[0].smsCount }}</strong></td>
+                    <th>Compte</th>
+                    <th>Nombre sms</th>
                 </tr>
+            </thead>
+            {% if numberOfSms is defined and numberOfSms is not empty %}
+                {% for sms in numberOfSms %}
+                    <tr>
+                        <td>{{ sms[0].subscriberNumber }}</td>
+                        <td>{{ sms.smsCount }}</td>
+                    </tr>
+                {% endfor %}
             {% endif %}
         </table>
 
+        <br />
         {% if topTen is defined and topTen|length > 0 %}
             <h2>Top 10</h2>
             <table border="1">
